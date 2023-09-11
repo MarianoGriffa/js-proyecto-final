@@ -1,139 +1,120 @@
-//productosEnCarrito = [];
-let productosEnCarrito = localStorage.getItem('producto-en-carrito');
-//lo transforma a un JSON  
-productosEnCarrito = JSON.parse(productosEnCarrito);  
-console.log(productosEnCarrito);        
-   
-const containerCarritoProductos = document.querySelector('#carrito-productos');
-const containerCarritoAcciones = document.querySelector('#carrito-acciones');
-const containerCarritoComprado = document.querySelector('#carrito-comprado'); 
-const containerCarritoVacio = document.querySelector('#carrito-vacio');
-let botonesEliminar = document.querySelectorAll('.carrito-producto-eliminar');
-let botonVaciar = document.querySelector('#carrito-acciones-vaciar');
-let botonComprar = document.querySelector('#carrito-acciones-comprar');
-const total = document.querySelector('#total'); 
-const tituloCompra = document.querySelector('#titulo-compra');   
 
-    //Pintamos los productos cargados al carrito
-   //Preguntamos si existe o no en el localstorage 
-   function cargarProductosCarrito() {  
-    if(productosEnCarrito && productosEnCarrito.length > 0) {  
-         
-     
-   containerCarritoVacio.classList.add('disabled');
-   containerCarritoProductos.classList.remove('disabled');
-   containerCarritoAcciones.classList.remove('disabled');
-   containerCarritoComprado.classList.add('disabled');  
- 
-   containerCarritoProductos.innerHTML = '';    
-   
-   productosEnCarrito.forEach( producto => { 
-     const elDiv = document.createElement('div');  
-     elDiv.classList.add('carrito-producto');
-           
-     elDiv.innerHTML = `    
-     <img  class="carrito-producto-imagen" src="${producto.img}" alt="${producto.titulo}" />
-     <div class="carrito-producto-titulo" >    
-       <small>Nombre</small>  
-       <h5>${producto.titulo}</h5>  
-     </div>   
-     <div class="carrito-producto-cantidad">
-       <small>Cantidad</small>
-       <p>${producto.cantidad}</p>  
-     </div>    
-     <div class="carrito-producto-precio">
-       <small>Precio</small>
-       <p>${producto.precio}</p>
-     </div>
-     <div class="carrito-producto-subtotal">
-       <small>Subtotal</small> 
-       <p>${producto.precio * producto.cantidad}</p>
-     </div>  
-     <button class="carrito-producto-eliminar" id="${producto.id}">  
-     <i class="bi bi-trash-fill"></i>    
-     </button>    
-     `;  
-  
-     containerCarritoProductos.append(elDiv);
-   });  
-  
- 
- }else { 
-   containerCarritoVacio.classList.remove('disabled');
-   containerCarritoProductos.classList.add('disabled');
-   containerCarritoAcciones.classList.add('disabled');
-   containerCarritoComprado.classList.add('disabled'); 
- }    
+let modalContainer = document.getElementById('modal-container');
+let verCarrito = document.getElementById("verCarrito");
 
- actualizarBotonesEliminar();
- actualizarTotalApagar();     
-
+function compraExistosa() {
+  Swal.fire({
+    position: 'top-center',
+    icon: 'success', 
+    title: 'Compra existosa',
+    showConfirmButton: false, 
+    timer: 1500 
+  }) 
+}
+function carritoVacio() {
+  Swal.fire({ 
+    icon: 'warning', 
+    title: 'Carrito Vacio', 
+    text: 'Compra algo..',
+  })     
 }
 
-cargarProductosCarrito(); 
-  
 
+verCarrito.addEventListener('click', modalCarrito);  
+
+function modalCarrito() {   
+  modalContainer.innerHTML = "";  
+  modalContainer.style.display = "flex";
+  const modalHeader = document.createElement("div");
+  modalHeader.className = "modal-header";
+  modalHeader.innerHTML = `
+  <h1 class="modal-header-title">Mi Carrito</h1> 
+  `;
+  modalContainer.append(modalHeader); 
   
- 
-//Llamada al botonEliminar
-//Actualizamos los productos del carrito 
-function actualizarBotonesEliminar() { 
-  botonesEliminar = document.querySelectorAll('.carrito-producto-eliminar');  
+  const modalbutton = document.createElement("h1");
+  modalbutton.className = "modal-header-button";
+  modalbutton.innerText = "x";  
+  
+  modalbutton.addEventListener("click", () => {
+    modalContainer.style.display = "none";
+  });   
    
+  modalHeader.append(modalbutton);
   
-  botonesEliminar.forEach( btn => {
-    btn.addEventListener('click', eliminarDelCarrito );
-  })    
-}   
+  pintarUnProducto(); 
+  pintarFooter(); 
+};      
 
-//Eliminar un producto del carrito
-function eliminarDelCarrito(e) {  
-   const idBoton = e.currentTarget.id;  
 
-   const index = productosEnCarrito.findIndex( producto => producto.id === idBoton);
-   productosEnCarrito.splice(index, 1);     
-       
-   cargarProductosCarrito();    
-      
- 
-   localStorage.setItem('producto-en-carrito',JSON.stringify(productosEnCarrito));
-}      
-
- //Llamada al botonVaciar
-  botonVaciar.addEventListener('click', vaciarCarrito);
-  
-  //Funcion para vaciar por completo el carrito 
-  function vaciarCarrito() {  
-      productosEnCarrito.length = 0;
-       localStorage.setItem('producto-en-carrito', JSON.stringify(productosEnCarrito));
-
-       cargarProductosCarrito();    
-  } 
-   
- 
-  //Devuelve la cantidad del total a pagar$$ 
-  function actualizarTotalApagar() {
-    let numeroTotal = productosEnCarrito.reduce((acc, producto) => acc + ( producto.precio * producto.cantidad ), 0);             
-    total.innerText = `$${numeroTotal}`;                
-             
-   }    
- 
-   //Llamamos al botonComprar para poder despues realizar el pago
-   botonComprar.addEventListener('click', comprarCarrito);
- 
-   //Funcion que nos lleva a realizar el pago, aunque falta terminar
-   function comprarCarrito() {   
-      tituloCompra.innerText = 'Finaliza tu compra';   
-  
-    productosEnCarrito.length = 0;
-    localStorage.setItem('producto-en-carrito', JSON.stringify(productosEnCarrito));
- 
-      
-    containerCarritoVacio.classList.add('disabled'); 
-    containerCarritoProductos.classList.add('disabled'); 
-    containerCarritoAcciones.classList.add('disabled'); 
-    containerCarritoComprado.classList.remove('disabled');  
+function pintarUnProducto() {
+  miCarrito.forEach((producto) => {
+    let carritoContent = document.createElement("div");
+    carritoContent.className = "modal-content";
+    carritoContent.innerHTML = ` 
+    <img src="${producto.img}"> 
+    <h3>${producto.categoria.nombre}</h3> 
+    <p>${producto.precio} $</p>  
+    <p>${producto.cantidad}</p>  
+    <p>Total: ${producto.cantidad * producto.precio} $</p>
+    <span class="borrar-producto">
+    <i class="bi bi-trash-fill"></i>   
+    </span> 
     
-   }   
+    `;  
+    
+    modalContainer.append(carritoContent); 
+
+    
+    let eliminar = carritoContent.querySelector(".borrar-producto");
+     
+    eliminar.addEventListener("click", () => {
+      eliminarProducto(producto.id);       
+    });  
       
- 
+  });
+}
+
+
+function pintarFooter() {
+  let total = miCarrito.reduce((acc, el) => acc + el.precio * el.cantidad, 0);
+
+  const elementDiv = document.createElement("div"); 
+  elementDiv.className = "modal-footer";
+  elementDiv.innerHTML = ` 
+    <p class="modal-footer-total">Total a pagar: <span>${total}$</span></p>
+    <button id="comprar" class="modal-footer-button">Comprar</button>  
+    `;     
+
+     modalContainer.append(elementDiv);       
+    
+     const btnComprar = document.getElementById("comprar");
+     btnComprar.addEventListener("click", () => {
+        if(total > 0) {
+          compraExistosa();
+          modalContainer.style.display = "none";  
+        }  else {
+          carritoVacio();
+          btnComprar.disabled = true;
+          modalContainer.style.display = "none";   
+        }
+     }) 
+}  
+
+function eliminarProducto(idBorrar) { 
+  const findId = miCarrito.find((producto) => producto.id === idBorrar);
+  miCarrito = miCarrito.filter((carritoId) => carritoId !== findId );
+     
+
+  carritoNumero();
+  guardarEnLocal();     
+  modalCarrito();        
+};    
+
+
+function carritoNumero() {  
+  let nuevoNumeroCarrito = miCarrito.reduce((acc, producto) => acc + producto.cantidad, 0) 
+   numerito.innerText = nuevoNumeroCarrito;                   
+}    
+
+
