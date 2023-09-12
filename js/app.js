@@ -56,7 +56,6 @@
       })
     })
 
-      
       function botonAgregarUnProducto() { 
         let botonAgregar = document.querySelectorAll('.producto-agregar');
         botonAgregar.forEach( btn => btn.addEventListener('click', agregarAlCarrito ))    

@@ -10,8 +10,8 @@ const productos = [
     } ,  
     precio: 3500, 
     stock: 3,  
-    cantidad: 0
-  
+    cantidad: 0 
+   
   },
  {
   id: 'Billetera-02', 

@@ -51,10 +51,10 @@ function pintarUnProducto() {
   miCarrito.forEach((producto) => {
     let carritoContent = document.createElement("div");
     carritoContent.className = "modal-content";
-    carritoContent.innerHTML = ` 
+    carritoContent.innerHTML = `  
     <img src="${producto.img}"> 
-    <h3>${producto.categoria.nombre}</h3> 
-    <p>${producto.precio} $</p>  
+    <h3>${producto.titulo}</h3> 
+    <p>${producto.precio} $</p>   
     <p>${producto.cantidad}</p>  
     <p>Total: ${producto.cantidad * producto.precio} $</p>
     <span class="borrar-producto">
@@ -92,11 +92,14 @@ function pintarFooter() {
      btnComprar.addEventListener("click", () => {
         if(total > 0) {
           compraExistosa();
-          modalContainer.style.display = "none";  
-        }  else {
+          modalContainer.style.display = "none"; 
+          miCarrito.length = 0;  
+          numerito.innerText = 0;   
+          guardarEnLocal();   
+        }  else { 
           carritoVacio();
           btnComprar.disabled = true;
-          modalContainer.style.display = "none";   
+          modalContainer.style.display = "none";     
         }
      }) 
 }  
@@ -105,7 +108,6 @@ function eliminarProducto(idBorrar) {
   const findId = miCarrito.find((producto) => producto.id === idBorrar);
   miCarrito = miCarrito.filter((carritoId) => carritoId !== findId );
      
-
   carritoNumero();
   guardarEnLocal();     
   modalCarrito();        
@@ -115,6 +117,6 @@ function eliminarProducto(idBorrar) {
 function carritoNumero() {  
   let nuevoNumeroCarrito = miCarrito.reduce((acc, producto) => acc + producto.cantidad, 0) 
    numerito.innerText = nuevoNumeroCarrito;                   
-}    
+}     
 
 
