@@ -1,14 +1,15 @@
- const containerProductos = document.getElementById('container-productos');
- const botonCategoria = document.querySelectorAll('.boton-categoria');  
- const tituloPrincipal = document.getElementById('titulo-principal');  
- const numerito = document.getElementById('numerito');  
+ const containerProductos = document.getElementById("container-productos");
+ const botonCategoria = document.querySelectorAll(".boton-categoria");  
+ const tituloPrincipal = document.getElementById("titulo-principal");  
+ const numerito = document.getElementById("numerito");   
     
- function pintarProductos(productoSeleccionado) {
 
-   containerProductos.innerHTML = '';        
+ function pintarProductos(productoSeleccionado) {
+   containerProductos.innerHTML = "";
+
    productoSeleccionado.forEach( producto => {     
-     const elDiv = document.createElement('div');   
-     elDiv.classList.add('producto');       
+     const elDiv = document.createElement("div");    
+     elDiv.classList.add("producto");       
      elDiv.innerHTML = `    
      <img class="producto-imagen" src="${producto.img}" alt="${producto.titulo}">
      <div class="producto-detalles">        
@@ -30,17 +31,16 @@
       botonAgregarUnProducto();    
     } 
     
-    pintarProductos(productos);       
+    pintarProductos(productos);        
     
 
     botonCategoria.forEach( boton  => {
-      boton.addEventListener('click', ({ target }) => {        
+      boton.addEventListener("click", ({ target }) => {        
           
-        botonCategoria.forEach( boton => boton.classList.remove('active')) 
-        target.classList.add('active')
- 
+        botonCategoria.forEach( boton => boton.classList.remove("active")) 
+        target.classList.add("active")
 
-        if ( target.id != "productos-todos" ) {   
+        if ( target.id != "productos-todos" ) {    
           const categoriaSeleccionada = productos.find( producto => producto.categoria.id === target.id);      
           tituloPrincipal.innerHTML = categoriaSeleccionada.categoria.nombre;
             
@@ -54,32 +54,40 @@
         }        
          
       })
-    })
+    })  
 
       function botonAgregarUnProducto() { 
-        let botonAgregar = document.querySelectorAll('.producto-agregar');
-        botonAgregar.forEach( btn => btn.addEventListener('click', agregarAlCarrito ))    
+        let botonAgregar = document.querySelectorAll(".producto-agregar");
+        botonAgregar.forEach( btn => btn.addEventListener("click", agregarAlCarrito ))    
       }    
 
      let miCarrito = JSON.parse(localStorage.getItem("mis-productos")) || []; 
-  
+     
+     function alertProductoAgregado() {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success', 
+        title: 'Producto Agregado',  
+        showConfirmButton: false, 
+        timer: 1500  
+      }) 
+     }
+ 
     function agregarAlCarrito( e ) {   
-      
-      
       const boton_id = e.currentTarget.id;
       const productoAgregado = productos.find(producto =>  producto.id === boton_id); 
         
     if(productoAgregado && productoAgregado.stock > 0 )   {  
         miCarrito.stock = productoAgregado.stock--; 
-        miCarrito.cantidad = productoAgregado.cantidad++;  
- 
+        miCarrito.cantidad = productoAgregado.cantidad++;   
+        alertProductoAgregado();
       } else {    
         productoAgregado.id.disabled = true;  
         Swal.fire({
-          icon: 'error', 
+          icon: 'error',  
           title: 'Error...', 
           text: 'No hay stock o seleccionaste el total disponible!',
-        })                 
+        })                    
       }       
      
       if(miCarrito.some( producto => producto.id === boton_id )) {
@@ -93,16 +101,16 @@
           
       actualizamosNumerito();  
       guardarEnLocal(); 
- 
+  
     }     
 
     function actualizamosNumerito() {
       let nuevoNumero = miCarrito.reduce((acc, producto) => acc + producto.cantidad, 0) 
        numerito.innerText = nuevoNumero;                 
-    }      
+    }       
  
       function guardarEnLocal() {
-          localStorage.setItem('mis-productos', JSON.stringify(miCarrito))  
+          localStorage.setItem("mis-productos", JSON.stringify(miCarrito))  
       };    
     
 

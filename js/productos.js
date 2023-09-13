@@ -1,10 +1,10 @@
 const productos = [
   //  billeteras 
   {
-    id: 'Billetera-04',
+    id: 'Billetera-01',
     titulo: 'Maxi Billetera Negra',
     img: './img/billeteras/billetera-negra.jpg',
-    categoria: {
+    categoria: { 
       nombre: 'Billeteras',  
       id: 'billeteras',  
     } ,  
@@ -40,7 +40,7 @@ const productos = [
 
 } ,
 { 
-  id: 'Billetera-04', 
+  id: 'Billetera-04',  
   titulo: 'Maxi Billetera Rosa',
   img: './img/billeteras/billetera-rosa.jpg',
   categoria: {

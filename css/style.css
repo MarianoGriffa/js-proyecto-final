@@ -6,9 +6,9 @@
   --clr-white: #ececec; /*ececec*/  
   --clr-gray: #e2e2e2;   
   --clr-red: red;      
-  --clr-eliminar: #e97676;       
+  --clr-eliminar: #e97676;        
 }       
-
+ 
 
  * {
   margin: 0;
@@ -56,7 +56,7 @@
 .menu {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.4rem; 
   justify-content: space-between;
 }
 
@@ -220,27 +220,6 @@ main {
   color: var(--clr-white);
 } 
 
-
-.modal-header {
-  display: flex; 
-  justify-content: space-around;
-  background-color: #0a090981;
-  color: #fff; 
-  width: 100%;  
-}
-
-.modal-header-title {
-  justify-self: start; 
-}
-
-.modal-header-mensaje {
-  text-align: center; 
-} 
-
-.modal-header-button {
-  cursor: pointer;
-} 
-
 .modal-container {
   width: 80%;
   margin: 0 10%;
@@ -256,7 +235,7 @@ main {
   overflow: auto; 
   z-index: 9; 
   top: 12vh;
-  scrollbar-color: none;
+  scrollbar-color: none; 
 }
 
 .modal-container::-webkit-scrollbar {
@@ -272,7 +251,7 @@ main {
 }
 
 .modal-header-title { 
-  justify-self: center;
+  justify-self: center; 
 } 
 
 .modal-header-button {
@@ -281,25 +260,25 @@ main {
 
 .modal-container > .modal-content {
   display: flex;
-  flex-direction: row;
+  flex-direction: row; 
   justify-content: space-around;
   align-items: center;
-  width: 70%;
+  width: 80%; 
   margin: 10px;
-  background-color: var(--clr-main);
+  background-color: var(--clr-main); 
 }
 
 .modal-container > div > img {
   height: 90px; 
   width: 110px; 
   border-radius: .8rem;
-}  
+  object-fit: cover;
+}   
 
 .modal-content .borrar-producto { 
-  color: red;
+  color: #ec5353; 
   cursor: pointer; 
 }
-
 
 .modal-footer {
   display: flex; 
@@ -311,25 +290,37 @@ main {
 
 .modal-footer-total {
   font-size: 22px;
-  margin-right: 90px; 
-}   
+  margin-right: 55px; 
+  margin-left: 55px; 
+}    
 
-.modal-footer-button {
-  background-color: #ffff007a;
+.modal-footer-button-comprar {
+  background-color: #4c9141; 
   color: var(--clr-gray); 
-  padding: 12px 22px; 
+  padding: .64rem .98rem;   
+  font-weight: 500; 
+  text-align: end;     
+  border: none;  
+  border-radius: .4rem;  
+}  
+
+.modal-footer-button-vaciar {
+  background-color: #ec5353;  
+  color: var(--clr-gray);   
+  padding: .64rem .98rem;  
   font-weight: 500;
   text-align: end;   
-  border: none; 
-  border-radius: .8rem; 
+  border: none;  
+  border-radius: .4rem;  
 }
  
-.modal-footer-total span {
-  color: #ffff007a;
-  margin-left: 4px;
-} 
+.modal-footer-total span { 
+  color: #17eb76;
+  margin-left: 4px; 
+}  
  
-
-
+.hide {
+  display: none; 
+}
 
  

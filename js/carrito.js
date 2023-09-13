@@ -1,14 +1,13 @@
+const modalContainer = document.getElementById("modal-container"); 
+const verCarrito = document.getElementById("verCarrito");
 
-let modalContainer = document.getElementById('modal-container');
-let verCarrito = document.getElementById("verCarrito");
-
-function compraExistosa() {
+function compraExistosa() { 
   Swal.fire({
     position: 'top-center',
     icon: 'success', 
-    title: 'Compra existosa',
+    title: 'Compra existosa', 
     showConfirmButton: false, 
-    timer: 1500 
+    timer: 1500  
   }) 
 }
 function carritoVacio() {
@@ -16,11 +15,11 @@ function carritoVacio() {
     icon: 'warning', 
     title: 'Carrito Vacio', 
     text: 'Compra algo..',
-  })     
+  })      
 }
 
 
-verCarrito.addEventListener('click', modalCarrito);  
+verCarrito.addEventListener("click", modalCarrito);  
 
 function modalCarrito() {   
   modalContainer.innerHTML = "";  
@@ -28,13 +27,13 @@ function modalCarrito() {
   const modalHeader = document.createElement("div");
   modalHeader.className = "modal-header";
   modalHeader.innerHTML = `
-  <h1 class="modal-header-title">Mi Carrito</h1> 
-  `;
-  modalContainer.append(modalHeader); 
+  <h1 class="modal-header-title">Tu Carrito</h1> 
+  `; 
+  modalContainer.append(modalHeader);   
   
   const modalbutton = document.createElement("h1");
   modalbutton.className = "modal-header-button";
-  modalbutton.innerText = "x";  
+  modalbutton.innerText = "x";   
   
   modalbutton.addEventListener("click", () => {
     modalContainer.style.display = "none";
@@ -51,9 +50,10 @@ function pintarUnProducto() {
   miCarrito.forEach((producto) => {
     let carritoContent = document.createElement("div");
     carritoContent.className = "modal-content";
-    carritoContent.innerHTML = `  
+    carritoContent.id = 'modalContent'; 
+    carritoContent.innerHTML = `    
     <img src="${producto.img}"> 
-    <h3>${producto.titulo}</h3> 
+    <h5>${producto.titulo}</h5> 
     <p>${producto.precio} $</p>   
     <p>${producto.cantidad}</p>  
     <p>Total: ${producto.cantidad * producto.precio} $</p>
@@ -65,7 +65,6 @@ function pintarUnProducto() {
     
     modalContainer.append(carritoContent); 
 
-    
     let eliminar = carritoContent.querySelector(".borrar-producto");
      
     eliminar.addEventListener("click", () => {
@@ -75,48 +74,62 @@ function pintarUnProducto() {
   });
 }
 
-
 function pintarFooter() {
   let total = miCarrito.reduce((acc, el) => acc + el.precio * el.cantidad, 0);
 
   const elementDiv = document.createElement("div"); 
-  elementDiv.className = "modal-footer";
+  elementDiv.className = "modal-footer"; 
   elementDiv.innerHTML = ` 
-    <p class="modal-footer-total">Total a pagar: <span>${total}$</span></p>
-    <button id="comprar" class="modal-footer-button">Comprar</button>  
-    `;     
+    <button id="vaciarCarrito" class="modal-footer-button-vaciar">Vaciar Carrito</button> 
+    <p class="modal-footer-total">Total: <span id="nroTotal">${total}$</span></p>
+    <button id="comprar" class="modal-footer-button-comprar">Comprar</button>   
+    `;      
 
-     modalContainer.append(elementDiv);       
-    
+     modalContainer.append(elementDiv);    
+     
+     let vaciarCarrito = document.getElementById("vaciarCarrito");
+     vaciarCarrito.addEventListener("click", () => {
+      let modalContenido =  document.querySelectorAll(".modal-content");
+      modalContenido.forEach((item) => {
+       item.parentNode.removeChild(item);
+      })
+      document.getElementById("nroTotal").innerText = "0$";  
+      miCarrito.length = 0;  
+      carritoNumero();  
+      guardarEnLocal(); 
+
+      })
+
      const btnComprar = document.getElementById("comprar");
      btnComprar.addEventListener("click", () => {
-        if(total > 0) {
+        if( miCarrito.length > 0 && total > 0) { 
           compraExistosa();
           modalContainer.style.display = "none"; 
           miCarrito.length = 0;  
           numerito.innerText = 0;   
-          guardarEnLocal();   
+          guardarEnLocal();    
         }  else { 
-          carritoVacio();
+          carritoVacio(); 
           btnComprar.disabled = true;
-          modalContainer.style.display = "none";     
-        }
+          modalContainer.style.display = "none";      
+        } 
      }) 
-}  
+
+     
+   } 
 
 function eliminarProducto(idBorrar) { 
   const findId = miCarrito.find((producto) => producto.id === idBorrar);
   miCarrito = miCarrito.filter((carritoId) => carritoId !== findId );
      
-  carritoNumero();
-  guardarEnLocal();     
-  modalCarrito();        
+  carritoNumero(); 
+  guardarEnLocal();      
+  modalCarrito();         
 };    
-
 
 function carritoNumero() {  
   let nuevoNumeroCarrito = miCarrito.reduce((acc, producto) => acc + producto.cantidad, 0) 
-   numerito.innerText = nuevoNumeroCarrito;                   
+   numerito.innerText = nuevoNumeroCarrito;                    
 }     
-
+ 
 
