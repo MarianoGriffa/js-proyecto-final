@@ -1,118 +1,59 @@
- const containerProductos = document.getElementById("container-productos");
- const botonCategoria = document.querySelectorAll(".boton-categoria");  
- const tituloPrincipal = document.getElementById("titulo-principal");  
- const numerito = document.getElementById("numerito");   
+ const containerProductos = document.getElementById("container-productos");   
+
+ function mostramosCardProductos(productoSelec) { 
+   containerProductos.innerHTML = "";   
+   productoSelec.forEach(producto => { 
+    const elDiv = document.createElement("div"); 
+    elDiv.classList.add('producto');           
+    elDiv.innerHTML = `       
+    <img class="producto-imagen" src="${producto.img}" alt="${producto.titulo}">    
+    <h3 class="producto-titulo">${producto.titulo}</h3>
+    <p class="producto-precio">$${producto.precio}</p>        
+    </div>                   
+    `;    
+
+     containerProductos.append(elDiv);  
+
+    let agregarAlCarrito = document.createElement("button");
+    agregarAlCarrito.innerText = "Agregar al Carrito";
+    agregarAlCarrito.className = "producto-agregar";
     
+    elDiv.append(agregarAlCarrito);  
 
- function pintarProductos(productoSeleccionado) {
-   containerProductos.innerHTML = "";
-
-   productoSeleccionado.forEach( producto => {     
-     const elDiv = document.createElement("div");    
-     elDiv.classList.add("producto");       
-     elDiv.innerHTML = `    
-     <img class="producto-imagen" src="${producto.img}" alt="${producto.titulo}">
-     <div class="producto-detalles">        
-     <h3 class="producto-title">${producto.titulo}</h3>
-     <div class="producto-precio-stock">  
-     <p class="producto-precio">$${producto.precio}</p>    
-     <p class="producto-stock">Stock: ${producto.stock}</p>
-     </div> 
-     <button class="producto-agregar" id="${producto.id}">
-      Agregar al Carrito    
-      </buton>      
-     </div>            
-     `;            
+     agregarAlCarrito.addEventListener("click", () => {
+       const repetido = miCarrito.some((productoRepetido) => productoRepetido.id === producto.id);
        
-      containerProductos.append(elDiv);  
-
-      }) 
+       if (repetido) {
+        miCarrito.map( (item) => {
+           if (item.id === producto.id) { 
+            item.cantidad++;    
+           }        
+         }); 
+       } else {
+        miCarrito.push({
+           id: producto.id, 
+           img: producto.img, 
+           titulo: producto.titulo,
+           precio: producto.precio,
+           cantidad: producto.cantidad,  
+         });
       
-      botonAgregarUnProducto();    
-    } 
+        carritoNumero();
+        guardarEnLocal();
+       }
+     }) 
     
-    pintarProductos(productos);        
-    
-
-    botonCategoria.forEach( boton  => {
-      boton.addEventListener("click", ({ target }) => {        
-          
-        botonCategoria.forEach( boton => boton.classList.remove("active")) 
-        target.classList.add("active")
-
-        if ( target.id != "productos-todos" ) {    
-          const categoriaSeleccionada = productos.find( producto => producto.categoria.id === target.id);      
-          tituloPrincipal.innerHTML = categoriaSeleccionada.categoria.nombre;
-            
-          const productoFiltrado = productos.filter( producto => producto.categoria.id === target.id );      
-           
-          pintarProductos(productoFiltrado);          
-           
-        } else {
-          tituloPrincipal.innerText = "Todos"; 
-          pintarProductos(productos);                 
-        }        
-         
-      })
-    })  
-
-      function botonAgregarUnProducto() { 
-        let botonAgregar = document.querySelectorAll(".producto-agregar");
-        botonAgregar.forEach( btn => btn.addEventListener("click", agregarAlCarrito ))    
-      }    
-
-     let miCarrito = JSON.parse(localStorage.getItem("mis-productos")) || []; 
-     
-     function alertProductoAgregado() {
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success', 
-        title: 'Producto Agregado',  
-        showConfirmButton: false, 
-        timer: 1500  
-      }) 
-     }
+    })
+    }
  
-    function agregarAlCarrito( e ) {   
-      const boton_id = e.currentTarget.id;
-      const productoAgregado = productos.find(producto =>  producto.id === boton_id); 
-        
-    if(productoAgregado && productoAgregado.stock > 0 )   {  
-        miCarrito.stock = productoAgregado.stock--; 
-        miCarrito.cantidad = productoAgregado.cantidad++;   
-        alertProductoAgregado();
-      } else {    
-        productoAgregado.id.disabled = true;  
-        Swal.fire({
-          icon: 'error',  
-          title: 'Error...', 
-          text: 'No hay stock o seleccionaste el total disponible!',
-        })                    
-      }       
-     
-      if(miCarrito.some( producto => producto.id === boton_id )) {
-          const indice = miCarrito.findIndex( producto => producto.id === boton_id); 
-          miCarrito[indice];           
-        
-        }else {  
-          productoAgregado.cantidad = 1;   
-          miCarrito.push(productoAgregado);                 
-        }      
-          
-      actualizamosNumerito();  
-      guardarEnLocal(); 
-  
-    }     
-
-    function actualizamosNumerito() {
-      let nuevoNumero = miCarrito.reduce((acc, producto) => acc + producto.cantidad, 0) 
-       numerito.innerText = nuevoNumero;                 
-    }       
+  mostramosCardProductos(productos); 
  
-      function guardarEnLocal() {
-          localStorage.setItem("mis-productos", JSON.stringify(miCarrito))  
-      };    
+  let miCarrito = JSON.parse(localStorage.getItem("mis-productos")) || []; 
     
+  function guardarEnLocal() {
+      localStorage.setItem("mis-productos", JSON.stringify(miCarrito))  
+  };    
+ 
 
 
 

@@ -16,59 +16,29 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.2/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="css/style.css" />
-    <title>WISDOM📦</title>
+    <title>WISDOM📦</title> 
   </head> 
-  <body> 
-    <div class="wrapper">
+  <body>  
         <header>  
           <a href="./index.html">
             <img class="logo" src="img/logo-wisdom.png" alt="WISDOM" />
           </a>
-          <nav> 
-            <ul class="menu"> 
-              <li>
-                <button id="productos-todos" class="boton-menu boton-categoria active">
-                  <i class="bi bi-hand-index-thumb-fill"></i>
-                  Todos
-                </button>   
-              </li>
-              <li>
-                <button id="billeteras" class="boton-menu boton-categoria"> 
-                  Billeteras 
-                </button>
-              </li>
-              <li>
-                <button id="carteras" class="boton-menu boton-categoria">
-                  Carteras
-                </button> 
-              </li> 
-              <li>
-                <button id="sobres" class="boton-menu boton-categoria">
-                  Sobres
-                </button> 
-              </li>             
-            </ul>     
-          </nav>
             
           <button id="verCarrito" class="boton-carrito" > 
-            <i class="bi bi-cart-fill"></i>  
+            <i class="bi bi-cart-fill"></i>     
            <span id="numerito" class="numerito">0</span>    
-         </button>   
+         </button>     
+        </header>  
   
-        </header>
-
-      <main>  
-        <h2 class="titulo-principal" id="titulo-principal">Todos los productos</h2>
- 
+      <main>   
         <section id="container-productos" class="container-productos"></section>    
 
         <div id="modal-container" class="modal-container"></div>
- 
-      </main> 
-    </div>    
+      </main>   
+    </div>     
        
     <script src="js/productos.js"></script>  
-    <script src="js/app.js"></script>   
+    <script src="js/app.js"></script>     
     <script src="js/carrito.js"></script>   
   </body> 
 </html>

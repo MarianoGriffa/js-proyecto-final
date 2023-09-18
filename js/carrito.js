@@ -1,12 +1,12 @@
 const modalContainer = document.getElementById("modal-container"); 
-const verCarrito = document.getElementById("verCarrito");
+const verCarrito = document.getElementById("verCarrito"); 
 
-function compraExistosa() { 
+function compraExistosa() {  
   Swal.fire({
     position: 'top-center',
     icon: 'success', 
     title: 'Compra existosa', 
-    showConfirmButton: false, 
+    showConfirmButton: false,  
     timer: 1500  
   }) 
 }
@@ -18,10 +18,9 @@ function carritoVacio() {
   })      
 }
 
-
-verCarrito.addEventListener("click", modalCarrito);  
-
-function modalCarrito() {   
+verCarrito.addEventListener("click", pintarHeader);  
+ 
+function pintarHeader() {   
   modalContainer.innerHTML = "";  
   modalContainer.style.display = "flex";
   const modalHeader = document.createElement("div");
@@ -44,32 +43,53 @@ function modalCarrito() {
   pintarUnProducto(); 
   pintarFooter(); 
 };      
-
-
+ 
 function pintarUnProducto() {
-  miCarrito.forEach((producto) => {
-    let carritoContent = document.createElement("div");
-    carritoContent.className = "modal-content";
-    carritoContent.id = 'modalContent'; 
-    carritoContent.innerHTML = `    
-    <img src="${producto.img}"> 
+  miCarrito.forEach((producto) => { 
+    let bodyCarrito = document.createElement("div"); 
+    bodyCarrito.className = "modal-content"; 
+    bodyCarrito.id = 'modalContent'; 
+    bodyCarrito.innerHTML = `      
+    <img src="${producto.img}">  
     <h5>${producto.titulo}</h5> 
-    <p>${producto.precio} $</p>   
-    <p>${producto.cantidad}</p>  
+    <p>${producto.precio} $</p>    
+    <span class="resta"> - </span>
+    <p>${producto.cantidad}</p> 
+    <span class="suma"> + </span> 
     <p>Total: ${producto.cantidad * producto.precio} $</p>
     <span class="borrar-producto">
-    <i class="bi bi-trash-fill"></i>   
-    </span> 
+    <i class="bi bi-trash-fill"></i>    
+    </span>   
     
     `;  
     
-    modalContainer.append(carritoContent); 
+    modalContainer.append(bodyCarrito);  
+ 
+    let resta = bodyCarrito.querySelector(".resta");
 
-    let eliminar = carritoContent.querySelector(".borrar-producto");
+    resta.addEventListener("click", () => {
+      if (producto.cantidad !== 1) { 
+        producto.cantidad--;  
+      }  
+      guardarEnLocal(); 
+      carritoNumero();  
+      pintarHeader();
+    });   
+
+    let suma = bodyCarrito.querySelector(".suma");
+    suma.addEventListener("click", () => {
+      producto.cantidad++;  
+      guardarEnLocal(); 
+      carritoNumero();  
+      pintarHeader();
+    }); 
+
+
+    let eliminar = bodyCarrito.querySelector(".borrar-producto");
      
     eliminar.addEventListener("click", () => {
-      eliminarProducto(producto.id);       
-    });  
+      eliminarProducto(producto.id);        
+    });    
       
   });
 }
@@ -91,11 +111,11 @@ function pintarFooter() {
      vaciarCarrito.addEventListener("click", () => {
       let modalContenido =  document.querySelectorAll(".modal-content");
       modalContenido.forEach((item) => {
-       item.parentNode.removeChild(item);
+       item.parentNode.removeChild(item); 
       })
       document.getElementById("nroTotal").innerText = "0$";  
       miCarrito.length = 0;  
-      carritoNumero();  
+      carritoNumero();   
       guardarEnLocal(); 
 
       })
@@ -107,12 +127,12 @@ function pintarFooter() {
           modalContainer.style.display = "none"; 
           miCarrito.length = 0;  
           numerito.innerText = 0;   
-          guardarEnLocal();    
-        }  else { 
+          guardarEnLocal();     
+        }  else {  
           carritoVacio(); 
           btnComprar.disabled = true;
           modalContainer.style.display = "none";      
-        } 
+        }  
      }) 
 
      
@@ -123,9 +143,10 @@ function eliminarProducto(idBorrar) {
   miCarrito = miCarrito.filter((carritoId) => carritoId !== findId );
      
   carritoNumero(); 
-  guardarEnLocal();      
-  modalCarrito();         
-};    
+  guardarEnLocal();       
+  pintarHeader();            
+};     
+
 
 function carritoNumero() {  
   let nuevoNumeroCarrito = miCarrito.reduce((acc, producto) => acc + producto.cantidad, 0) 
