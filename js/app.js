@@ -1,5 +1,5 @@
  const containerProductos = document.getElementById("container-productos");   
-
+ 
  function mostramosCardProductos(productoSelec) { 
    containerProductos.innerHTML = "";   
    productoSelec.forEach(producto => { 
@@ -49,11 +49,14 @@
   mostramosCardProductos(productos); 
  
   let miCarrito = JSON.parse(localStorage.getItem("mis-productos")) || []; 
+  numerito.innerText = miCarrito.length;   
     
+  
+  
   function guardarEnLocal() {
       localStorage.setItem("mis-productos", JSON.stringify(miCarrito))  
   };    
- 
+  
 
 
 
